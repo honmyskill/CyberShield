@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberShield — Кибербезопасность и Защита</title>
+    <style>
+        :root {
+            --bg-color: #0a0f1d;
+            --text-color: #e2e8f0;
+            --accent-color: #00f2fe;
+            --secondary-accent: #4facfe;
+            --card-bg: #111827;
+            --danger-color: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        header {
+            background-color: rgba(17, 24, 39, 0.9);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #1f2937;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--accent-color), var(--secondary-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-color);
+        }
+
+        /* Главные компоненты */
+        .page {
+            display: none;
+            padding-top: 80px;
+            min-height: 100vh;
+        }
+
+        .page.active-page {
+            display: block;
+        }
+
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #fff;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--secondary-accent), var(--accent-color));
+            color: #000;
+            font-weight: bold;
+            padding: 0.8rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .hero-text { flex: 1; }
+        .hero-text h1 { font-size: 3.5rem; margin-bottom: 1rem; color: #fff; }
+        .hero-text span { color: var(--accent-color); }
+        .hero-image { flex: 1; text-align: center; font-size: 8rem; }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 10px;
+            border: 1px solid #1f2937;
+            transition: border-color 0.3s;
+        }
+
+        .card:hover {
+            border-color: var(--accent-color);
+        }
+
+        .danger-card {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .danger-list li {
+            margin-bottom: 1rem;
+            list-style-type: none;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .danger-list li::before {
+            content: "⚠️";
+            position: absolute;
+            left: 0;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(135deg, #111827, #070b14);
+            border-radius: 15px;
+            padding: 4rem 2rem;
+        }
+
+        .auth-container {
+            max-width: 450px;
+            margin: 4rem auto;
+            background-color: var(--card-bg);
+            padding: 3rem;
+            border-radius: 10px;
+            border: 1px solid #1f2937;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-group input[type="email"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 2rem;
+        }
+
+        .profile-sidebar {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            height: fit-content;
+        }
+
+        .profile-menu-item {
+            display: block;
+            padding: 0.8rem 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .profile-menu-item.active-tab {
+            background-color: var(--secondary-accent);
+            color: #000;
+            font-weight: bold;
+        }
+
+        .profile-content {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active-content { display: block; }
+
+        .progress-bar {
+            background-color: #1f2937;
+            border-radius: 10px;
+            height: 10px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress {
+            background: linear-gradient(90deg, var(--secondary-accent), var(--accent-color));
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #1f2937;
+            margin-top: 5rem;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">🛡️ CyberShield</div>
+            <nav>
+                <a onclick="switchPage('main')" id="nav-main" class="active">Главная</a>
+                <a onclick="switchPage('courses')" id="nav-courses">Курсы</a>
+                <a onclick="switchPage('auth')" id="nav-auth">Личный кабинет</a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="page-main" class="page active-page">
+        <section class="hero">
+            <div class="hero-text">
+                <h1>CyberShield <br><span>Antivirus Pro</span></h1>
+                <p style="font-size: 1.2rem; margin-bottom: 2rem;">Максимальная защита от создателей экосистемы безопасности. Наш собственный антивирус блокирует 99.9% современных угроз, шифровальщиков и скрытых майнеров в реальном времени.</p>
+                <button class="btn" onclick="alert('Спасибо за интерес! Скачивание антивируса пока недоступно.')">Скачать защиту бесплатно</button>
+            </div>
+            <div class="hero-image">🛡️</div>
+        </section>
+
+        <section style="background-color: #0d1527;">
+            <div style="max-width:1200px; margin:0 auto;">
+                <h2>Что такое кибербезопасность?</h2>
+                <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;">Это не просто набор программ, это цифровая гигиена и щит между вашими личными данными и злоумышленниками.</p>
+                
+                <div class="grid-cards">
+                    <div class="card">
+                        <h3>Если не соблюдать безопасность:</h3>
+                        <p style="margin-top: 1rem; color: #94a3b8;">Вы рискуете потерять доступ к банковским картам, социальным сетям, личным фотографиям и рабочим аккаунтам.</p>
+                    </div>
+                    <div class="card danger-card">
+                        <h3>Опасности «скачивания всего подряд»</h3>
+                        <ul class="danger-list" style="margin-top: 1rem;">
+                            <li><strong>Трояны-вымогатели:</strong> Зашифруют все файлы и потребуют выкуп.</li>
+                            <li><strong>Скрытые майнеры:</strong> Компьютер будет тормозить, работая на чужой карман.</li>
+                            <li><strong>Стиллеры паролей:</strong> Ваши пароли от всех сайтов утекут в сеть за секунду.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="cta-section">
+                <h2>Готовы защитить себя и близких?</h2>
+                <p style="margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">Узнайте, как распознавать хакерские уловки до того, как они нанесут вред. Пройдите наше интерактивное обучение.</p>
+                <button class="btn" onclick="switchPage('courses')">Перейти к курсам</button>
+            </div>
+        </section>
+    </div>
+
+
+    <div id="page-courses" class="page">
+        <section>
+            <h2>📚 Академия Кибербезопасности</h2>
+            
+            <div id="courses-catalog" class="grid-cards">
+                <div class="card" style="border-top: 4px solid var(--accent-color); display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <span style="background: rgba(0, 242, 254, 0.2); color: var(--accent-color); padding: 0.2rem 0.6rem; border-radius: 3px; font-size: 0.8rem; font-weight: bold;">ДОСТУПЕН СЕЙЧАС</span>
+                        <h3 style="margin-top: 1rem;">Основы Кибербезопасности и Защиты Данных</h3>
+                        <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">Изучите три кита ИБ, разберитесь в типах вирусов (стиллеры, майнеры) и узнайте секреты киберкриминалистики.</p>
+                    </div>
+                    <button class="btn" style="margin-top: 1.5rem; width: 100%;" onclick="startCourse()">Начать обучение</button>
+                </div>
+
+                <div class="card" style="opacity: 0.6; border-top: 4px solid #6b7280;">
+                    <div>
+                        <span style="background: #1f2937; color: #94a3b8; padding: 0.2rem 0.6rem; border-radius: 3px; font-size: 0.8rem; font-weight: bold;">В РАЗРАБОТКЕ</span>
+                        <h3 style="margin-top: 1rem; color: #94a3b8;">Защита домашних Wi-Fi сетей и Роутеров</h3>
+                        <p style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">Как заблокировать соседей, скрыть свою сеть и настроить брандмауэр против хакерского сканирования извне.</p>
+                    </div>
+                    <button class="btn" style="margin-top: 1.5rem; width: 100%; background: #1f2937; color: #6b7280; cursor: not-allowed;" disabled>Скоро открытие</button>
+                </div>
+
+                <div class="card" style="opacity: 0.6; border-top: 4px solid #6b7280;">
+                    <div>
+                        <span style="background: #1f2937; color: #94a3b8; padding: 0.2rem 0.6rem; border-radius: 3px; font-size: 0.8rem; font-weight: bold;">В РАЗРАБОТАНИЕ</span>
+                        <h3 style="margin-top: 1rem; color: #94a3b8;">Социальная инженерия: Анатомия обмана</h3>
+                        <p style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">Разбор психологических уловок мошенников. Как распознать фишинг и защитить близких.</p>
+                    </div>
+                    <button class="btn" style="margin-top: 1.5rem; width: 100%; background: #1f2937; color: #6b7280; cursor: not-allowed;" disabled>Скоро открытие</button>
+                </div>
+            </div>
+
+            <div id="active-course-interface" style="display: none; margin-top: 2rem;">
+                <div style="background: #111827; padding: 1rem; border-radius: 10px; margin-bottom: 2rem; border: 1px solid #1f2937;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="font-weight: bold;">Прогресс курса:</span>
+                        <span id="course-progress-text" style="color: var(--accent-color); font-weight: bold;">25%</span>
+                    </div>
+                    <div class="progress-bar"><div id="course-progress-line" class="progress" style="width: 25%;"></div></div>
+                </div>
+
+                <div class="profile-grid">
+                    <div class="profile-sidebar" style="background-color: #111827;">
+                        <div class="profile-menu-item active-tab" onclick="switchLesson('lesson1')" id="tab-less1">1. Триада CIA (ИБ)</div>
+                        <div class="profile-menu-item" onclick="switchLesson('lesson2')" id="tab-less2">2. Классификация Malware</div>
+                        <div class="profile-menu-item" onclick="switchLesson('lesson3')" id="tab-less3">3. Киберкриминалистика</div>
+                        <div class="profile-menu-item" onclick="switchLesson('lesson4')" id="tab-less4">4. Аттестационный тест</div>
+                    </div>
+
+                    <div class="profile-content" style="background-color: #111827; border: 1px solid #1f2937; padding: 2.5rem;">
+                        <div id="lesson1" class="tab-content active-content">
+                            <h3 style="color: var(--accent-color); margin-bottom: 1.5rem; font-size: 1.8rem;">Урок 1: Фундамент ИБ — Триада CIA</h3>
+                            <p style="margin-bottom: 1.5rem;">В международной практике безопасность любых систем базируется на трех столпах — Триаде CIA:</p>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
+                                <div style="background: #161e2e; padding: 1.2rem; border-radius: 8px; border-left: 4px solid var(--accent-color);">
+                                    <h4 style="color: #fff; margin-bottom: 0.3rem;">1. Конфиденциальность (Confidentiality)</h4>
+                                    <p style="font-size: 0.95rem; color: #cbd5e1;">Гарантия того, что секретные или личные данные не будут раскрыты посторонним лицам.</p>
+                                </div>
+                                <div style="background: #161e2e; padding: 1.2rem; border-radius: 8px; border-left: 4px solid var(--secondary-accent);">
+                                    <h4 style="color: #fff; margin-bottom: 0.3rem;">2. Целостность (Integrity)</h4>
+                                    <p style="font-size: 0.95rem; color: #cbd5e1;">Защита данных от несанкционированного, случайного или злонамеренного изменения в процессе хранения.</p>
+                                </div>
+                                <div style="background: #161e2e; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #10b981;">
+                                    <h4 style="color: #fff; margin-bottom: 0.3rem;">3. Доступность (Availability)</h4>
+                                    <p style="font-size: 0.95rem; color: #cbd5e1;">Своевременный и беспрепятственный доступ легитимных пользователей к сервисам по первому требованию.</p>
+                                </div>
+                            </div>
+                            <button class="btn" onclick="switchLesson('lesson2')">Перейти к классификации вирусов →</button>
+                        </div>
+
+                        <div id="lesson2" class="tab-content">
+                            <h3 style="color: var(--accent-color); margin-bottom: 1.5rem; font-size: 1.8rem;">Урок 2: Полная классификация вредоносного ПО (Malware)</h3>
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 2rem; background: #161e2e; font-size: 0.9rem;">
+                                <thead>
+                                    <tr style="border-bottom: 2px solid #1f2937; text-align: left;">
+                                        <th style="padding: 10px;">Тип угрозы</th>
+                                        <th style="padding: 10px;">Механизм работы</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid #1f2937;">
+                                        <td style="padding: 10px; font-weight: bold;">Классические вирусы</td>
+                                        <td style="padding: 10px;">Внедряют свой код в легитимные файлы (.exe) и размножаются при их запуске.</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #1f2937;">
+                                        <td style="padding: 10px; font-weight: bold;">Сетевые черви (Worms)</td>
+                                        <td style="padding: 10px;">Самостоятельные программы. Сканируют сеть и копируют себя на другие ПК.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px; font-weight: bold;">Троянские программы</td>
+                                        <td style="padding: 10px;">Маскируются под официальный софт, скрывая внутри опасную хакерскую нагрузку.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+                                <div style="background: #1f2937; padding: 1rem; border-radius: 5px; border-left: 4px solid var(--danger-color);">
+                                    <strong>1. Стиллеры (Stealers)</strong> — Крадут сохраненные пароли и куки из браузеров.
+                                </div>
+                                <div style="background: #1f2937; padding: 1rem; border-radius: 5px; border-left: 4px solid #f59e0b;">
+                                    <strong>2. Скрытые майнеры (Cryptojackers)</strong> — Захватывают ресурсы процессора для добычи крипты.
+                                </div>
+                                <div style="background: #1f2937; padding: 1rem; border-radius: 5px; border-left: 4px solid #3b82f6;">
+                                    <strong>3. Руткиты (Rootkits)</strong> — Внедряются в ядро ОС (Ring 0), скрывая вирусы от системных антивирусов.
+                                </div>
+                            </div>
+                            <button class="btn" onclick="switchLesson('lesson3')">Изучить Киберкриминалистику →</button>
+                        </div>
+
+                        <div id="lesson3" class="tab-content">
+                            <h3 style="color: var(--accent-color); margin-bottom: 1.5rem; font-size: 1.8rem;">Урок 3: Введение в Форензику (Криминалистику)</h3>
+                            <ul style="margin-left: 1.5rem; margin-bottom: 1.5rem; line-height: 1.8; color: #cbd5e1;">
+                                <li><strong>Анализ RAM (Живой памяти):</strong> Извлечение скрытых процессов и ключей шифрования из слепка ОЗУ.</li>
+                                <li><strong>Таймлайн-анализ:</strong> Изучение метаданных файлов MACB для воссоздания цепочки атаки.</li>
+                            </ul>
+                            <button class="btn" onclick="switchLesson('lesson4')">Пройти аттестационный тест →</button>
+                        </div>
+
+                        <div id="lesson4" class="tab-content">
+                            <h3 style="color: var(--accent-color); margin-bottom: 1.5rem; font-size: 1.8rem;">Урок 4: Финальный аттестационный тест</h3>
+                            <form id="quiz-form" onsubmit="checkQuiz(event)">
+                                <div style="margin-bottom: 1.5rem; background: #1f2937; padding: 1.5rem; border-radius: 8px;">
+                                    <p style="font-weight: bold; margin-bottom: 0.8rem;">1. Шифрование базы данных вымогателем без согласия владельца — это прямое нарушение какого свойства ИБ?</p>
+                                    <label style="display:block; margin-bottom:0.5rem;"><input type="radio" name="q1" value="conf" required> Конфиденциальности</label>
+                                    <label style="display:block; margin-bottom:0.5rem;"><input type="radio" name="q1" value="integrity"> Целостности данных</label>
+                                    <label style="display:block;"><input type="radio" name="q1" value="avail"> Доступности</label>
+                                </div>
+
+                                <div style="margin-bottom: 1.5rem; background: #1f2937; padding: 1.5rem; border-radius: 8px;">
+                                    <p style="font-weight: bold; margin-bottom: 0.8rem;">2. Какое вредоносное ПО способно скрываться на уровне ядра ОС (Ring 0), перехватывая низкоуровневые системные вызовы?</p>
+                                    <label style="display:block; margin-bottom:0.5rem;"><input type="radio" name="q2" value="stiller" required> Стиллер паролей</label>
+                                    <label style="display:block; margin-bottom:0.5rem;"><input type="radio" name="q2" value="rootkit"> Руткит</label>
+                                    <label style="display:block;"><input type="radio" name="q2" value="worm"> Сетевой червь</label>
+                                </div>
+
+                                <button type="submit" class="btn" style="width: 100%; padding: 1rem;">Отправить ответы на проверку</button>
+                            </form>
+                            <div id="quiz-result" style="display: none; margin-top: 1.5rem; text-align: center; font-weight: bold; padding: 1rem; border-radius: 5px;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" style="margin-top: 2rem; background: #1f2937; color: #fff;" onclick="exitCourse()">← Вернуться к каталогу курсов</button>
+            </div>
+        </section>
+    </div>
+
+
+    <div id="page-auth" class="page">
+       <div id="auth-form-block" class="auth-container">
+    <h3 style="text-align: center; margin-bottom: 2rem; font-size: 1.8rem;">Регистрация в ЛК</h3>
+    <form id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+            <label>Электронная почта (с @, до 80 символов)</label>
+            <input type="email" id="email" required maxlength="80" placeholder="example@mail.com">
+        </div>
+        <div class="form-group">
+            <label>Пароль (от 9 до 40 символов)</label>
+            <input type="password" id="password" required minlength="9" placeholder="••••••••">
+        </div>
+        <div class="form-group">
+            <label>Повторите пароль (от 9 до 40 символов)</label>
+            <input type="password" id="confirm_password" required minlength="9" placeholder="••••••••">
+        </div>
+        <div class="form-group checkbox-group">
+            <input type="checkbox" id="privacy" required>
+            <label for="privacy">Я согласен с правилами сайта.</label>
+        </div>
+        <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Создать кабинет</button>
+    </form>
+</div>
+
+        <div id="lk-block" style="display: none; max-width: 1200px; margin: 0 auto; padding: 2rem;">
+            <h2>Личный кабинет студента</h2>
+            <div class="profile-grid">
+                <div class="profile-sidebar">
+                    <div style="margin-bottom: 2rem; font-weight: bold; color: var(--accent-color);" id="user-email-display">user@mail.com</div>
+                    <div class="profile-menu-item active-tab" onclick="switchTab('passed')" id="tab-btn-passed">Пройденные курсы</div>
+                    <div class="profile-menu-item" onclick="switchTab('all-courses')" id="tab-btn-all-courses">Вкладка с курсами</div>
+                    <hr style="border-color: #1f2937; margin: 1rem 0;">
+                    <div class="profile-menu-item" style="color: var(--danger-color);" onclick="logout()">Выйти</div>
+                </div>
+
+                <div class="profile-content">
+                    <div id="tab-passed" class="tab-content active-content">
+                        <h3>Ваш прогресс обучения</h3>
+                        <div style="margin-top: 1.5rem; background: #1f2937; padding: 1.5rem; border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <strong>Курс: Основы Кибербезопасности</strong>
+                                <span id="lk-progress-text" style="color: #6b7280;">Еще не начат (0%)</span>
+                            </div>
+                            <div class="progress-bar"><div id="lk-progress-line" class="progress" style="width: 0%;"></div></div>
+                        </div>
+                    </div>
+                    <div id="tab-all-courses" class="tab-content">
+                        <h3>Доступные программы обучения</h3>
+                        <div class="card" style="padding: 1.5rem;">
+                            <h4>🔒 Курс: Основы Кибербезопасности и Защиты Данных</h4>
+                            <button class="btn" style="margin-top: 1rem; padding: 0.5rem 1rem; font-size: 0.9rem;" onclick="switchPage('courses'); startCourse();">Перейти к изучению</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 CyberShield. Все права защищены.</p>
+    </footer>
+
+    <script>
+        let maxLessonReached = 1; 
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active-page');
+            });
+            document.querySelectorAll('nav a').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            document.getElementById('page-' + pageId).classList.add('active-page');
+            document.getElementById('nav-' + pageId).classList.add('active');
+            
+            if (pageId === 'courses') { exitCourse(); }
+            window.scrollTo(0, 0);
+        }
+
+        function startCourse() {
+            document.getElementById('courses-catalog').style.display = 'none';
+            document.getElementById('active-course-interface').style.display = 'block';
+            switchLesson('lesson1'); 
+        }
+
+        // Возврат на витрину курсов
+        function exitCourse() {
+            document.getElementById('active-course-interface').style.display = 'none';
+            document.getElementById('courses-catalog').style.display = 'grid';
+        }
+
+        function updateProgress(lessonNum) {
+            if (lessonNum > maxLessonReached) { maxLessonReached = lessonNum; }
+            let percent = maxLessonReached * 25;
+            
+            document.getElementById('course-progress-text').innerText = percent + "%";
+            document.getElementById('course-progress-line').style.width = percent + "%";
+            
+            const lkText = document.getElementById('lk-progress-text');
+            const lkLine = document.getElementById('lk-progress-line');
+            
+            if (lkText && lkLine) {
+                if (percent === 100) {
+                    lkText.innerText = "Пройден успешно! (100%)";
+                    lkText.style.color = "#22c55e";
+                } else {
+                    lkText.innerText = "В процессе (" + percent + "%)";
+                    lkText.style.color = "var(--accent-color)";
+                }
+                lkLine.style.width = percent + "%";
+            }
+        }
+
+        function switchLesson(lessonId) {
+            document.querySelectorAll('#page-courses .tab-content').forEach(content => {
+                content.classList.remove('active-content');
+            });
+            document.querySelectorAll('#page-courses .profile-menu-item').forEach(item => {
+                item.classList.remove('active-tab');
+            });
+
+            document.getElementById(lessonId).classList.add('active-content');
+            const num = parseInt(lessonId.replace('lesson', ''));
+            const suffix = lessonId.replace('lesson', 'less');
+            document.getElementById('tab-' + suffix).classList.add('active-tab');
+            
+            updateProgress(num);
+            document.querySelector('#page-courses h2').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function checkQuiz(event) {
+            event.preventDefault();
+            const q1 = document.querySelector('input[name="q1"]:checked').value;
+            const q2 = document.querySelector('input[name="q2"]:checked').value;
+            const resultBox = document.getElementById('quiz-result');
+            
+            resultBox.style.display = "block";
+            
+            if (q1 === 'integrity' && q2 === 'rootkit') {
+                resultBox.style.backgroundColor = "rgba(34, 197, 94, 0.2)";
+                resultBox.style.color = "#22c55e";
+                resultBox.innerHTML = "🎉 Потрясающе! Все ответы верны. Курс завершен на 100%, результаты зафиксированы в вашем Личном кабинете!";
+                updateProgress(4); 
+            } else {
+                resultBox.style.backgroundColor = "rgba(239, 68, 66, 0.2)";
+                resultBox.style.color = "var(--danger-color)";
+                resultBox.innerHTML = "❌ Ошибка в ответах. Пожалуйста, повторите Триаду CIA и информацию о руткитах.";
+            }
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            if (!email.includes('@') || email.length > 80) {
+                alert("Ошибка: Неверный Email!");
+                return;
+            }
+            
+            // Если длина пароля или его подтверждения выходит за рамки 9-40
+            if (password.length < 9 || password.length > 40 || confirmPassword.length < 9 || confirmPassword.length > 40) {
+                alert("Ошибка безопасности: Длина пароля должна быть строго от 9 до 40 символов!");
+                return;
+            }
+
+            const passwordRegex = /^[A-Za-z0-9!@#$%^&*()_+\-=\[\]\{\};':",\./<>?]+$/;
+            if (!passwordRegex.test(password)) {
+                alert("Используйте только латиницу, цифры и спецсимволы!");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("Пароли не совпадают!");
+                return;
+            }
+
+            document.getElementById('user-email-display').innerText = "Студент: " + email;
+            document.getElementById('auth-form-block').style.display = 'none';
+            document.getElementById('lk-block').style.display = 'block';
+            updateProgress(maxLessonReached); 
+        }
+
+        function logout() {
+            document.getElementById('registerForm').reset();
+            document.getElementById('lk-block').style.display = 'none';
+            document.getElementById('auth-form-block').style.display = 'block';
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('#page-auth .tab-content').forEach(content => {
+                content.classList.remove('active-content');
+            });
+            document.querySelectorAll('#page-auth .profile-menu-item').forEach(item => {
+                item.classList.remove('active-tab');
+            });
+
+            document.getElementById('tab-' + tabName).classList.add('active-content');
+            document.getElementById('tab-btn-' + tabName).classList.add('active-tab');
+        }
+    </script>
+</body>
+</html>
