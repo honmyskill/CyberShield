@@ -12,6 +12,7 @@
             --secondary-accent: #4facfe;
             --card-bg: #111827;
             --danger-color: #ef4444;
+            --operator-color: #a855f7;
         }
 
         * {
@@ -26,6 +27,8 @@
             color: var(--text-color);
             line-height: 1.6;
         }
+
+        /* Навигация */
         header {
             background-color: rgba(17, 24, 39, 0.9);
             position: fixed;
@@ -107,6 +110,7 @@
             box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
         }
 
+        /* Стили Главной Страницы */
         .hero {
             display: flex;
             align-items: center;
@@ -161,6 +165,7 @@
             padding: 4rem 2rem;
         }
 
+        /* Стили формы Входа/Регистрации */
         .auth-container {
             max-width: 450px;
             margin: 4rem auto;
@@ -181,7 +186,8 @@
         }
 
         .form-group input[type="email"],
-        .form-group input[type="password"] {
+        .form-group input[type="password"],
+        .form-group textarea {
             width: 100%;
             padding: 0.8rem;
             background-color: #1f2937;
@@ -191,7 +197,13 @@
             font-size: 1rem;
         }
 
-        .form-group input:focus {
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
             outline: none;
             border-color: var(--accent-color);
         }
@@ -203,6 +215,7 @@
             font-size: 0.85rem;
         }
 
+        /* Личный кабинет */
         .profile-grid {
             display: grid;
             grid-template-columns: 1fr 3fr;
@@ -328,8 +341,8 @@
                 <div class="card" style="border-top: 4px solid var(--accent-color); display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
                         <span style="background: rgba(0, 242, 254, 0.2); color: var(--accent-color); padding: 0.2rem 0.6rem; border-radius: 3px; font-size: 0.8rem; font-weight: bold;">ДОСТУПЕН СЕЙЧАС</span>
-                        <h3 style="margin-top: 1rem;">Основы Кибербезопасности и Защиты Данных</h3>
-                        <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">Изучите три кита ИБ, разберитесь в типах вирусов (стиллеры, майнеры) и узнайте секреты киберкриминалистики.</p>
+                        <h3 id="course-title-render" style="margin-top: 1rem;">Основы Кибербезопасности и Защиты Данных</h3>
+                        <p id="course-desc-render" style="color: #94a3b8; font-size: 0.9rem; margin-top: 0.5rem;">Изучите три кита ИБ, разберитесь в типах вирусов (стиллеры, майнеры) и узнайте секреты киберкриминалистики.</p>
                     </div>
                     <button class="btn" style="margin-top: 1.5rem; width: 100%;" onclick="startCourse()">Начать обучение</button>
                 </div>
@@ -345,7 +358,7 @@
 
                 <div class="card" style="opacity: 0.6; border-top: 4px solid #6b7280;">
                     <div>
-                        <span style="background: #1f2937; color: #94a3b8; padding: 0.2rem 0.6rem; border-radius: 3px; font-size: 0.8rem; font-weight: bold;">В РАЗРАБОТАНИЕ</span>
+                        <span style="background: #1f2937; color: #94a3b8; padding: 0.2rem 0.6rem; border-radius: 3px; font-size: 0.8rem; font-weight: bold;">В РАЗРАБОТКЕ</span>
                         <h3 style="margin-top: 1rem; color: #94a3b8;">Социальная инженерия: Анатомия обмана</h3>
                         <p style="color: #6b7280; font-size: 0.9rem; margin-top: 0.5rem;">Разбор психологических уловок мошенников. Как распознать фишинг и защитить близких.</p>
                     </div>
@@ -373,7 +386,7 @@
                     <div class="profile-content" style="background-color: #111827; border: 1px solid #1f2937; padding: 2.5rem;">
                         <div id="lesson1" class="tab-content active-content">
                             <h3 style="color: var(--accent-color); margin-bottom: 1.5rem; font-size: 1.8rem;">Урок 1: Фундамент ИБ — Триада CIA</h3>
-                            <p style="margin-bottom: 1.5rem;">В международной практике безопасность любых систем базируется на трех столпах — Триаде CIA:</p>
+                            <p style="margin-bottom: 1.5rem;">В международной практике безопасность любых систем базируется на трех столпах — **Триаде CIA**:</p>
                             
                             <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2rem;">
                                 <div style="background: #161e2e; padding: 1.2rem; border-radius: 8px; border-left: 4px solid var(--accent-color);">
@@ -471,28 +484,29 @@
 
 
     <div id="page-auth" class="page">
-       <div id="auth-form-block" class="auth-container">
-    <h3 style="text-align: center; margin-bottom: 2rem; font-size: 1.8rem;">Регистрация в ЛК</h3>
-    <form id="registerForm" onsubmit="handleRegister(event)">
-        <div class="form-group">
-            <label>Электронная почта (с @, до 80 символов)</label>
-            <input type="email" id="email" required maxlength="80" placeholder="example@mail.com">
+        <div id="auth-form-block" class="auth-container">
+            <h3 style="text-align: center; margin-bottom: 2rem; font-size: 1.8rem;">Регистрация / Вход в ЛК</h3>
+            <form id="registerForm" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <label>Электронная почта (с @, до 80 символов)</label>
+                    <input type="email" id="email" required placeholder="example@mail.com">
+                </div>
+                <div class="form-group">
+                    <label>Пароль (от 8 до 40 символов)</label>
+                    <input type="password" id="password" required minlength="8" placeholder="••••••••">
+                </div>
+                <div class="form-group" id="confirm-password-group">
+                    <label>Повторите пароль (от 8 до 40 символов)</label>
+                    <input type="password" id="confirm_password" minlength="8" placeholder="••••••••">
+                </div>
+                <div class="form-group checkbox-group" id="privacy-group">
+                    <input type="checkbox" id="privacy">
+                    <label for="privacy">Я согласен с правилами сайта.</label>
+                </div>
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Войти / Создать кабинет</button>
+            </form>
+            <p style="text-align: center; font-size: 0.8rem; color: #6b7280; margin-top: 1rem;">Для входа оператора введите данные учётной записи CMS</p>
         </div>
-        <div class="form-group">
-            <label>Пароль (от 9 до 40 символов)</label>
-            <input type="password" id="password" required minlength="9" placeholder="••••••••">
-        </div>
-        <div class="form-group">
-            <label>Повторите пароль (от 9 до 40 символов)</label>
-            <input type="password" id="confirm_password" required minlength="9" placeholder="••••••••">
-        </div>
-        <div class="form-group checkbox-group">
-            <input type="checkbox" id="privacy" required>
-            <label for="privacy">Я согласен с правилами сайта.</label>
-        </div>
-        <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Создать кабинет</button>
-    </form>
-</div>
 
         <div id="lk-block" style="display: none; max-width: 1200px; margin: 0 auto; padding: 2rem;">
             <h2>Личный кабинет студента</h2>
@@ -526,6 +540,35 @@
                 </div>
             </div>
         </div>
+
+        <div id="operator-block" style="display: none; max-width: 1200px; margin: 0 auto; padding: 2rem;">
+            <h2 style="color: var(--operator-color); text-align: left; margin-bottom: 1rem;">Панель управления оператора (CMS)</h2>
+            <div class="profile-grid">
+                <div class="profile-sidebar" style="border-left: 4px solid var(--operator-color);">
+                    <div style="margin-bottom: 2rem; font-weight: bold; color: var(--operator-color);">ADMIN: operatot@mail.com</div>
+                    <div class="profile-menu-item active-tab" style="background-color: rgba(168, 85, 247, 0.2); color: #fff;">Редактор курсов</div>
+                    <hr style="border-color: #1f2937; margin: 1rem 0;">
+                    <div class="profile-menu-item" style="color: var(--danger-color);" onclick="logout()">Выйти из CMS</div>
+                </div>
+
+                <div class="profile-content">
+                    <h3>Редактирование активного курса</h3>
+                    <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1.5rem;">Изменения мгновенно обновят контент на вкладке «Курсы».</p>
+                    
+                    <form onsubmit="saveCourseChanges(event)">
+                        <div class="form-group">
+                            <label style="font-weight: bold; color: #fff;">Название курса:</label>
+                            <input type="text" id="edit-course-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-weight: bold; color: #fff;">Описание курса:</label>
+                            <textarea id="edit-course-desc" required></textarea>
+                        </div>
+                        <button type="submit" class="btn" style="background: linear-gradient(45deg, #a855f7, #22d3ee); color: #fff; width: 100%;">Сохранить изменения на сайте</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -534,6 +577,18 @@
 
     <script>
         let maxLessonReached = 1; 
+
+        let courseData = {
+            title: "Основы Кибербезопасности и Защиты Данных",
+            desc: "Изучите три кита ИБ, разберитесь в типах вирусов (стиллеры, майнеры) и узнайте секреты киберкриминалистики."
+        };
+
+        function renderCourse() {
+            document.getElementById('course-title-render').innerText = courseData.title;
+            document.getElementById('course-desc-render').innerText = courseData.desc;
+        }
+
+        renderCourse();
 
         function switchPage(pageId) {
             document.querySelectorAll('.page').forEach(page => {
@@ -556,7 +611,6 @@
             switchLesson('lesson1'); 
         }
 
-        // Возврат на витрину курсов
         function exitCourse() {
             document.getElementById('active-course-interface').style.display = 'none';
             document.getElementById('courses-catalog').style.display = 'grid';
@@ -623,18 +677,35 @@
 
         function handleRegister(event) {
             event.preventDefault();
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirm_password').value;
 
+            // Вход оператора
+            if (email === 'operatot@mail.com') {
+                if (password === 'jgthfnjhf') {
+                    document.getElementById('auth-form-block').style.display = 'none';
+                    document.getElementById('lk-block').style.display = 'none';
+                    document.getElementById('operator-block').style.display = 'block';
+                    
+                    document.getElementById('edit-course-title').value = courseData.title;
+                    document.getElementById('edit-course-desc').value = courseData.desc;
+                    return;
+                } else {
+                    alert("Ошибка: Неверный пароль оператора CMS!");
+                    return;
+                }
+            }
+
+            // Валидация студента
             if (!email.includes('@') || email.length > 80) {
-                alert("Ошибка: Неверный Email!");
+                alert("Ошибка: Неверный формат Email или превышен лимит 80 символов!");
                 return;
             }
             
-            // Если длина пароля или его подтверждения выходит за рамки 9-40
-            if (password.length < 9 || password.length > 40 || confirmPassword.length < 9 || confirmPassword.length > 40) {
-                alert("Ошибка безопасности: Длина пароля должна быть строго от 9 до 40 символов!");
+            // ИЗМЕНЕНИЕ: Жесткая проверка длины на уровне JavaScript (теперь от 8 до 40)
+            if (password.length < 8 || password.length > 40 || confirmPassword.length < 8 || confirmPassword.length > 40) {
+                alert("Ошибка безопасности: Длина пароля должна быть строго от 8 до 40 символов!");
                 return;
             }
 
@@ -651,13 +722,23 @@
 
             document.getElementById('user-email-display').innerText = "Студент: " + email;
             document.getElementById('auth-form-block').style.display = 'none';
+            document.getElementById('operator-block').style.display = 'none';
             document.getElementById('lk-block').style.display = 'block';
             updateProgress(maxLessonReached); 
+        }
+
+        function saveCourseChanges(event) {
+            event.preventDefault();
+            courseData.title = document.getElementById('edit-course-title').value;
+            courseData.desc = document.getElementById('edit-course-desc').value;
+            renderCourse();
+            alert("Успешно! Данные курса обновлены на сайте.");
         }
 
         function logout() {
             document.getElementById('registerForm').reset();
             document.getElementById('lk-block').style.display = 'none';
+            document.getElementById('operator-block').style.display = 'none';
             document.getElementById('auth-form-block').style.display = 'block';
         }
 
